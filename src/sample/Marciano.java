@@ -7,14 +7,18 @@ import javafx.scene.image.Image;
 
 public class Marciano {
 
+    Home home = new Home();
     private Image image;
     private double posX, posY, velX, velY, width, height;
     private int dirX, dirY;
 
-    public Marciano(Image image){
-        this.posX = 400;
-        this.posY = 165;
-        this.velX = 2.0f;
+//    public Marciano() {
+//    }
+
+    public Marciano(Image image, int x , int y){
+        this.posX = x;
+        this.posY = y;
+        this.velX = 20.0f;
         this.velY = 1.5f;
         this.dirX = 1;
         this.dirY = 1;
@@ -24,61 +28,54 @@ public class Marciano {
         image = i;
         width = image.getWidth();
         height = image.getHeight();
+    }
+    public void setPosition(double x, double y) {
+        this.posX = x;
+        this.posY = y;
+    }
+    public double getPositionX() {
+        return posX;
+    }
+
+    public double getPositionY() {
+        return posY;
+    }
+    public Image getImage() {
+        return image;
+    }
+
+    public void render(GraphicsContext gc, Image image, double x, double y) {
+
+        gc.drawImage(image, x, y);
+    }
+    public void clear(GraphicsContext gc, double x, double y) {
+        gc.clearRect(x ,y, width, height);
+
 
     }
-    public void render(GraphicsContext gc) {
-        for (int i = 0; i < 1200; i+= 150) {
-            //posX = posX+ i;
-            gc.drawImage(image, posX+i, posY);
-            System.out.println("position: "+ (posX+i));
-        }
-        for (int i = 0; i < 1200; i+= 150) {
-            //posX = posX+ i;
-            gc.drawImage(image, posX+i, posY+120);
-            System.out.println("position: "+ (posX+i));
-        }
-        for (int i = 0; i < 1200; i+= 150) {
-            //posX = posX+ i;
-            gc.drawImage(image, posX+i, posY+240);
-            System.out.println("position: "+ (posX+i));
-        }
-;
-    }
-    public void clear(GraphicsContext gc) {
-        for (int i = 0; i < 1200; i+= 150) {
-            gc.clearRect(posX + i,posY, width, height);
-
-        }
-        for (int i = 0; i < 1200; i+= 150) {
-            gc.clearRect(posX + i,posY + 120, width, height);
-
-        }
-        for (int i = 0; i < 1200; i+= 150) {
-            gc.clearRect(posX + i,posY + 240, width, height);
-
-        }
-    }
-    public void move(Scene scene){
+    public double moveX(Scene scene){
         if(dirX == 1) {
-            posX += velX*2;
-            if(posX>=640-width) {
-                dirX = (-1)*dirX;
-                posY += 30;
+            posX += velX;
+        }else {
+            posX -= velX;
+        }
+        return posX;
+    }
+    public double moveY(Scene scene){
+        if(dirX == 1) {
+            posX += velX;
+
+            if(posX>=1650-width) {
+                dirX = (-1) * dirX;
+                posY += 60;
             }
         }else {
-            posX -= velX*2;
-            if(posX<=0) {
+            posX -= velX;
+            if(posX <= 10) {
                 dirX = (-1)*dirX;
-                posY += 30;
+                posY += 60;
             }
         }
-//        if(dirY == 1){
-//            posY += velY;
-//            if(posY>=400-height) dirY = (-1)*dirY;
-//        }
-//        else {
-//            posY -= velY;
-//            if(posY<=0) dirY = (-1)*dirY;
-//        }
+        return posY;
     }
 }

@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 public class Player {
 
     private Image image;
+    Home home = new Home();
+    Projectil projectil ;
 
     private double posX, posY, velX, velY, width, height;
     private int dirX, dirY;
@@ -52,14 +54,48 @@ public class Player {
                     posX -= velX;
                 }
                 if (event.getCode() == KeyCode.SPACE){
-                  //  home.shoot(home.play);
+
+                    disparar();
                     //new Projectil().disparar();
 
                 }
 
             }
         });
+    }
+public void disparar() {
 
+   // projectil.setImage(new Image("images/projectil.png", 15, 15, false, false));
+    projectil.setPosition(getPosX() + 40, getPosY() - 20);
+    // disparo.setVelocity(0, -350);
+    // disparo.render(gc);
+    //misil.add(disparo);
+    // System.out.println(getPosX());
+}
+//    for ( Projectil a: misil)
+//
+//        System.out.println("Pos x: " + a.getPosX() + "  pos y:_ "+ a.getPosY() + " -... velocit y.. "+ a.getVelY());
+//}
+    public void moveRight(){
+        setPosX(posX += velX);
+    }
+    public void moveLeft(){
+        setPosX(posX -= velX);
     }
 
+    public double getPosX() {
+        return posX;
+    }
+
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
+
+    public void setPosY(double posY) {
+        this.posY = posY;
+    }
 }

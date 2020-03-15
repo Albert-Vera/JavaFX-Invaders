@@ -12,6 +12,7 @@ public class Projectil  {
     private Image image;
     private double posX, posY, velX, velY, width, height;
     private int dirX, dirY;
+    private boolean impacto = true;
     private GraphicsContext gc;
     //private Sprite player = new Sprite(300, 750, 40, 40, "player", Color.BLUE);
 
@@ -33,15 +34,48 @@ public class Projectil  {
 
     }
     public void render(GraphicsContext gc) {
-
         gc.drawImage(image, posX, posY);
     }
 
     public void clear(GraphicsContext gc) {
-        gc.clearRect(posX-150,posY, width+300, height+20);
+        gc.clearRect(posX,posY, width, height);
     }
 
-    public void move(Scene scene) {
+    public void move() {
 
+            posY -= 10;
+
+//        return posY;
+    }
+    public double getVelY() {
+        return velY;
+    }
+
+    public void setVelY(double velX) {
+        this.velX = velX;
+    }
+    public void setPosition(double x, double y) {
+        this.posX = x ;
+        this.posY = y;
+    }
+    public void setVelocity(double x, double y) {
+        this.velX = x;
+        this.velY = y;
+    }
+
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
+    }
+
+    public boolean getImpacto() {
+        return impacto;
+    }
+
+    public void setImpacto(boolean impacto) {
+        this.impacto = impacto;
     }
 }
