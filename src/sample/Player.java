@@ -40,42 +40,30 @@ public class Player {
         gc.clearRect(posX-150,posY, width+300, height+20);
     }
 
-    public void move(Scene scene) {
-
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-
-
-                if (event.getCode() == KeyCode.RIGHT){
-                    posX += velX;
-                }
-                if (event.getCode() == KeyCode.LEFT){
-                    posX -= velX;
-                }
-                if (event.getCode() == KeyCode.SPACE){
-
-                    disparar();
-                    //new Projectil().disparar();
-
-                }
-
-            }
-        });
-    }
-public void disparar() {
-
-   // projectil.setImage(new Image("images/projectil.png", 15, 15, false, false));
-    projectil.setPosition(getPosX() + 40, getPosY() - 20);
-    // disparo.setVelocity(0, -350);
-    // disparo.render(gc);
-    //misil.add(disparo);
-    // System.out.println(getPosX());
-}
-//    for ( Projectil a: misil)
+//    public void move(Scene scene) {
 //
-//        System.out.println("Pos x: " + a.getPosX() + "  pos y:_ "+ a.getPosY() + " -... velocit y.. "+ a.getVelY());
-//}
+//        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent event) {
+//
+//
+//                if (event.getCode() == KeyCode.RIGHT){
+//                    posX += velX;
+//                }
+//                if (event.getCode() == KeyCode.LEFT){
+//                    posX -= velX;
+//                }
+//                if (event.getCode() == KeyCode.SPACE){
+//
+//                    disparar();
+//                    //new Projectil().disparar();
+//
+//                }
+//
+//            }
+//        });
+//    }
+
     public void moveRight(){
         setPosX(posX += velX);
     }

@@ -17,14 +17,14 @@ public class Projectil  {
     //private Sprite player = new Sprite(300, 750, 40, 40, "player", Color.BLUE);
 
 
-    public Projectil (Image image){
+    public Projectil (){
         this.posX = 200;
         this.posY = 900;
         this.velX = 20.0f;
         this.velY = 1.5f;
         this.dirX = 1;
         this.dirY = 1;
-        setImage(image);
+      //  setImage(image);
     }
 
     public void setImage(Image i) {
@@ -34,19 +34,22 @@ public class Projectil  {
 
     }
     public void render(GraphicsContext gc) {
-        gc.drawImage(image, posX, posY);
+        gc.drawImage(image, getPosX(), getPosY());
     }
 
     public void clear(GraphicsContext gc) {
         gc.clearRect(posX,posY, width, height);
     }
 
-    public void move() {
-
-            posY -= 10;
-
-//        return posY;
+    public double move() {
+        setPosY(posY -= 20);
+        return posY;
     }
+
+    public void setPosY(double posY) {
+        this.posY = posY;
+    }
+
     public double getVelY() {
         return velY;
     }
@@ -73,6 +76,10 @@ public class Projectil  {
 
     public boolean getImpacto() {
         return impacto;
+    }
+
+    public Image getImage() {
+        return image;
     }
 
     public void setImpacto(boolean impacto) {
