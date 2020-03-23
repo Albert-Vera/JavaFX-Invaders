@@ -40,30 +40,6 @@ public class Player {
         gc.clearRect(posX-150,posY, width+300, height+20);
     }
 
-//    public void move(Scene scene) {
-//
-//        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-//            @Override
-//            public void handle(KeyEvent event) {
-//
-//
-//                if (event.getCode() == KeyCode.RIGHT){
-//                    posX += velX;
-//                }
-//                if (event.getCode() == KeyCode.LEFT){
-//                    posX -= velX;
-//                }
-//                if (event.getCode() == KeyCode.SPACE){
-//
-//                    disparar();
-//                    //new Projectil().disparar();
-//
-//                }
-//
-//            }
-//        });
-//    }
-
     public void moveRight(){
         setPosX(posX += velX);
     }

@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.geometry.Rectangle2D;
 
+import java.util.ArrayList;
+
 public class Sprite
 {
     private Image image;
@@ -13,8 +15,10 @@ public class Sprite
     private double velX;
     private double velY;
     private int dirX, dirY;
+    private int id_nave;
     private double width;
     private double height;
+    Home home = new Home();
 
     public Sprite()
     {
@@ -73,7 +77,7 @@ public class Sprite
         posY -= 20;
         return posY;
     }
-    public double moveX(Scene scene){
+    public double moveX(){
         if(dirX == 1) {
             posX += velX;
         }else {
@@ -81,13 +85,21 @@ public class Sprite
         }
         return posX;
     }
-    public double moveY(Scene scene){
+    public double moveY(){
         if(dirX == 1) {
             posX += velX;
 
             if(posX>=1650-width) {
-                dirX = (-1) * dirX;
-                posY += 60;
+//                home.marcianoNaves = new ArrayList<>();
+//                for (Sprite as: home.marcianoNaves){
+                    dirX = (-1) * dirX;
+                    posY += 60;
+//                    as.setDirX(dirX);
+//                    as.setPosY(posY);
+//                    as.setPosition(posX, posY);
+//                    home.marcianoNaves.add(as);
+               // }
+
             }
         }else {
             posX -= velX;
@@ -116,6 +128,38 @@ public class Sprite
 
     public double getPosY() {
         return posY;
+    }
+
+    public int getId_nave() {
+        return id_nave;
+    }
+
+    public void setId_nave(int id_nave) {
+        this.id_nave = id_nave;
+    }
+
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
+
+    public int getDirX() {
+        return dirX;
+    }
+
+    public void setDirX(int dirX) {
+        this.dirX = dirX;
+    }
+
+    public int getDirY() {
+        return dirY;
+    }
+
+    public void setDirY(int dirY) {
+        this.dirY = dirY;
+    }
+
+    public void setPosY(double posY) {
+        this.posY = posY;
     }
 
     public String toString()

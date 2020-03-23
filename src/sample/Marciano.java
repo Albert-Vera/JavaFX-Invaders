@@ -10,7 +10,7 @@ public class Marciano {
     Home home = new Home();
     private Image image;
     private double posX, posY, velX, velY, width, height;
-    private int dirX, dirY;
+    private int dirX, dirY, id_Nave;
 
 //    public Marciano() {
 //    }
@@ -50,8 +50,6 @@ public class Marciano {
     }
     public void clear(GraphicsContext gc, double x, double y) {
         gc.clearRect(x ,y, width, height);
-
-
     }
     public double moveX(Scene scene){
         if(dirX == 1) {
@@ -77,5 +75,13 @@ public class Marciano {
             }
         }
         return posY;
+    }
+
+    public int getId_Nave() {
+        return id_Nave;
+    }
+
+    public void setId_Nave(int id_Nave) {
+        this.id_Nave = id_Nave;
     }
 }

@@ -26,16 +26,15 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class Home implements Initializable {
-    private int APP_HEIGHT = 1800;
-    private int APP_WIDTH = 2100;
     private int SPACE = 40;
     private int cantidadNaves = 10;
     ArrayList<Sprite> marcianoNaves;
     ArrayList<Sprite> misil = new ArrayList<>();
     private Scene scene;
     private GraphicsContext gc;
-    Player player;
-
+    private Player player;
+    private SoundEffect  explosionEffect;
+    Image imageFondo;
 
     @FXML
     ImageView fondoPantalla;
@@ -43,10 +42,12 @@ public class Home implements Initializable {
     AnchorPane anchorPaneFondo;
     @FXML Canvas canvas;
 
-    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.117), new EventHandler<ActionEvent>(){
+    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.217), new EventHandler<ActionEvent>(){
         @Override
         public void handle(ActionEvent event) {
-            player.clear(gc);
+            //pintar la imatge neteja la resta d'spprites i no cal fer el clear
+            gc.drawImage(imageFondo,0,0);
+            //player.clear(gc);
             //player.move(scene);
             player.render(gc);
             detectarTeclado();
@@ -65,46 +66,78 @@ public class Home implements Initializable {
             while (misilLanzado.hasNext()){
                 Sprite proyectil = misilLanzado.next();
                 if(proyectil.intersects(marciano)){
-                    System.out.println("posicon x: " + marciano.getPosX()+ "  posicon y: " + marciano.getPosY());
                     impactesIter.remove();
                     misilLanzado.remove();
-                    marciano.clear(gc, marciano.getPosX(), marciano.getPosY());
-                    proyectil.clear(gc, proyectil.getPosX(), proyectil.getPosY());
-                   explosion(marciano.getPosX(), marciano.getPosY());
-                  // subir score
+//                    marciano.clear(gc, marciano.getPosX(), marciano.getPosY());
+//                    proyectil.clear(gc, proyectil.getPosX(), proyectil.getPosY());
+                    explosion(marciano.getPosX(), marciano.getPosY());
+                    // subir score
                 }
             }
         }
     }
+
+
     private void explosion(double x, double y){
         Sprite sprite = new Sprite();
-        sprite.clear(gc, x-30,y-10);
-       //sprite.setImage("images/exlo3.png");
-        sprite.setPosition(x-30,y-10);
-        marcianoNaves.add(sprite);
+        //sprite.clear(gc, x-30,y-10);
+        sprite.setImage(new Image("images/explosionn.png",105,105,false,false));
+        sprite.setPosition(x-20,y-30);
+       // for (int i = 0; i < 10; i++) {
+            sprite.render(gc);
+            explosionEffect.playClip();
+      //  }
+
 
 
     }
 
     public void renderitzarMarciano() {
         for ( Sprite nau: marcianoNaves){
-            nau.clear(gc, nau.getPosX(), nau.getPosY());
-            nau.setPosition(nau.moveX(scene), nau.moveY(scene));
+          //  nau.clear(gc, nau.getPosX(), nau.getPosY());
+            nau.setPosition(nau.moveX(), nau.moveY());
             nau.render(gc);
+
         }
+    //    for ( Sprite nau: marcianoNaves){
+            // nau.clear(gc, nau.getPosX(), nau.getPosY());
+//            if (nau.getPosX() >= 1500){
+//                int as = 0;
+//                boolean ds = false;
+//                for (Sprite a: marcianoNaves) {
+////                    if (a.getId_nave() == 0) {
+////                        System.out.println("get-90  : " + (a.getPosX()-90)+ "  " + a.getPosX()+ "  y: "+a.getPosY());
+////                        a.setPosition(a.getPosX(, a.getPosY()+60);
+////                        a.setDirX((-1) * a.getDirX());
+////                    }else
+//                    a.setDirX((-1) * a.getDirX());
+//                    a.setPosY( a.getPosY()+60);
+//
+//                }
+//                break;
+//            }
+//            nau.setPosX(nau.moveX(marcianoNaves, nau.getId_nave()));
+//            nau.render(gc);
+//        }
     }
     private void renderitzarMisil() {
         for (int i = 0; i < misil.size() - 1; i++) {
-            misil.get(i).clear(gc, misil.get(i).getPosX(), misil.get(i).getPosY());
+            //misil.get(i).clear(gc, misil.get(i).getPosX(), misil.get(i).getPosY());
             misil.get(i).setPosition( misil.get(i).getPosX(), misil.get(i).move());
             misil.get(i).render(gc);
             //  misil.get(i).
         }
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Image imageFondo = new Image("images/fondo.jpg", 4000, 2700,false, false);
-        fondoPantalla.setImage(imageFondo);
+        anchorPaneFondo.setPrefHeight(Mides.APP_HEIGHT);;
+        anchorPaneFondo.setPrefWidth(Mides.APP_WIDTH);
+        canvas.setWidth(Mides.APP_WIDTH);
+        canvas.setHeight(Mides.APP_HEIGHT);
+        setSoundEffects();
+        imageFondo = new Image("images/fondo.jpg", Mides.APP_WIDTH, Mides.APP_HEIGHT,false, false);
+        fondoPantalla = new ImageView(imageFondo);
         player = new Player(new Image("images/player.png"));
         crearMarciano();
 
@@ -121,10 +154,10 @@ public class Home implements Initializable {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.RIGHT){
-                   player.moveRight();
+                    player.moveRight();
                 }
                 if (event.getCode() == KeyCode.LEFT){
-                  player.moveLeft();
+                    player.moveLeft();
                 }
                 if (event.getCode() == KeyCode.SPACE){
                     disparar();
@@ -137,13 +170,15 @@ public class Home implements Initializable {
     }
 
     public void crearMarciano(){
-       marcianoNaves = new ArrayList<>();
+        marcianoNaves = new ArrayList<>();
         for (int y = 165, i= 0 ; y < 450 && i < 3 ; y += 120, i++) {
             for (int x = 180, e = 0; x < 1700 && e < cantidadNaves; x += 140, e++) {
 
                 Sprite marciano = new Sprite();
                 marciano.setImage(new Image("images/ufo.png",75,35,false,false));
                 marciano.setPosition(x,y);
+                marciano.setId_nave(e);
+//                if (marciano.getId_nave()==0)  marciano.setImage(new Image("images/1.png",75,35,false,false));
                 marcianoNaves.add(marciano);
                 // totalEnemies++;
             }
@@ -154,10 +189,12 @@ public class Home implements Initializable {
         disparo.setImage(new Image("images/projectil.png", 15,15,false, false));
         disparo.setPosition(player.getPosX() + 40, player.getPosY() - 20);
         misil.add(disparo);
-        System.out.println("playe x: " + player.getPosX());
+    }
+    private void setSoundEffects() {
+
+        explosionEffect = new SoundEffect("images/So_explosio.wav");
 
     }
-
 
 
 }
