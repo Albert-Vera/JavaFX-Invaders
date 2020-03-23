@@ -1,5 +1,6 @@
 package sample;
 
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -14,12 +15,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+
+
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-
-
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +38,13 @@ public class Home implements Initializable {
     private GraphicsContext gc;
     private Player player;
     private SoundEffect  explosionEffect;
+
+
+    String s = getClass().getClassLoader().getResource("sound/soexplosio.wav").toExternalForm();
+    Media sound = new Media(s);
+    MediaPlayer audioClip = new MediaPlayer(sound);
     Image imageFondo;
+
 
     @FXML
     ImageView fondoPantalla;
@@ -83,10 +93,15 @@ public class Home implements Initializable {
         //sprite.clear(gc, x-30,y-10);
         sprite.setImage(new Image("images/explosionn.png",105,105,false,false));
         sprite.setPosition(x-20,y-30);
-       // for (int i = 0; i < 10; i++) {
             sprite.render(gc);
-            explosionEffect.playClip();
-      //  }
+//        File filestring = new File("sound/soexplosio.wav");
+//        Media file = new Media(filestring.toURI().toString());
+//        MediaPlayer mediaPlayer = new MediaPlayer(file);
+//        mediaPlayer.autoPlayProperty();
+//        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+//        mediaPlayer.play();
+
+        audioClip.play();
 
 
 
@@ -135,7 +150,11 @@ public class Home implements Initializable {
         anchorPaneFondo.setPrefWidth(Mides.APP_WIDTH);
         canvas.setWidth(Mides.APP_WIDTH);
         canvas.setHeight(Mides.APP_HEIGHT);
-        setSoundEffects();
+       // System.out.println("duració:" + sound.getDuration().toString() + " loc:" + sound.getSource());
+       // setSoundEffects();
+        audioClip.setCycleCount(MediaPlayer.INDEFINITE);
+
+        //audioClip.setCycleCount(8);
         imageFondo = new Image("images/fondo.jpg", Mides.APP_WIDTH, Mides.APP_HEIGHT,false, false);
         fondoPantalla = new ImageView(imageFondo);
         player = new Player(new Image("images/player.png"));
@@ -190,11 +209,11 @@ public class Home implements Initializable {
         disparo.setPosition(player.getPosX() + 40, player.getPosY() - 20);
         misil.add(disparo);
     }
-    private void setSoundEffects() {
-
-        explosionEffect = new SoundEffect("images/So_explosio.wav");
-
-    }
+//    private void setSoundEffects() {
+//
+//        explosionEffect = new SoundEffect("/home/albert/IdeaProjects/Invaders/src/sound/soexplosio.wav");
+//
+//    }
 
 
 }
