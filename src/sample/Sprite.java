@@ -74,7 +74,7 @@ public class Sprite
         gc.clearRect(x ,y, width, height);
     }
     public double move() {
-        posY -= 20;
+        posY -= 50;
         return posY;
     }
     public double moveX(){

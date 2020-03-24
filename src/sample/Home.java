@@ -23,7 +23,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +31,9 @@ import java.util.ResourceBundle;
 public class Home implements Initializable {
     private int SPACE = 40;
     private int cantidadNaves = 10;
+    private int limiteDiparos = 12;
+    private int posLimitDisparo = 230;
+    private boolean misilRetarder = true;
     ArrayList<Sprite> marcianoNaves;
     ArrayList<Sprite> misil = new ArrayList<>();
     private Scene scene;
@@ -40,12 +42,12 @@ public class Home implements Initializable {
     private SoundEffect  explosionEffect;
 
 
-    String s = getClass().getClassLoader().getResource("sound/soexplosio.wav").toExternalForm();
+    private String s = getClass().getClassLoader().getResource("sound/soexplosio.wav").toExternalForm();
+    private String disparo = getClass().getClassLoader().getResource("sound/disparo2.mp3").toExternalForm();
+
     Media sound = new Media(s);
-    MediaPlayer audioClip = new MediaPlayer(sound);
+    Media laser = new Media(disparo);
     Image imageFondo;
-
-
     @FXML
     ImageView fondoPantalla;
     @FXML
@@ -55,10 +57,7 @@ public class Home implements Initializable {
     Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0.217), new EventHandler<ActionEvent>(){
         @Override
         public void handle(ActionEvent event) {
-            //pintar la imatge neteja la resta d'spprites i no cal fer el clear
             gc.drawImage(imageFondo,0,0);
-            //player.clear(gc);
-            //player.move(scene);
             player.render(gc);
             detectarTeclado();
             renderitzarMarciano();
@@ -76,12 +75,16 @@ public class Home implements Initializable {
             while (misilLanzado.hasNext()){
                 Sprite proyectil = misilLanzado.next();
                 if(proyectil.intersects(marciano)){
-                    impactesIter.remove();
-                    misilLanzado.remove();
-//                    marciano.clear(gc, marciano.getPosX(), marciano.getPosY());
-//                    proyectil.clear(gc, proyectil.getPosX(), proyectil.getPosY());
-                    explosion(marciano.getPosX(), marciano.getPosY());
+                    try {
+                        impactesIter.remove();
+                        misilLanzado.remove();
+                        explosion(marciano.getPosX(), marciano.getPosY());
+                    }catch (Exception e){
+                        System.out.println("errorrrr  en colisiones");
+                    }
                     // subir score
+                }else {
+                    if (proyectil.getPosY() < posLimitDisparo) misilLanzado.remove();
                 }
             }
         }
@@ -90,22 +93,13 @@ public class Home implements Initializable {
 
     private void explosion(double x, double y){
         Sprite sprite = new Sprite();
-        //sprite.clear(gc, x-30,y-10);
         sprite.setImage(new Image("images/explosionn.png",105,105,false,false));
         sprite.setPosition(x-20,y-30);
             sprite.render(gc);
-//        File filestring = new File("sound/soexplosio.wav");
-//        Media file = new Media(filestring.toURI().toString());
-//        MediaPlayer mediaPlayer = new MediaPlayer(file);
-//        mediaPlayer.autoPlayProperty();
-//        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-//        mediaPlayer.play();
-
+        MediaPlayer audioClip = new MediaPlayer(sound);
+        audioClip.volumeProperty();
         audioClip.play();
-
-
-
-    }
+ }
 
     public void renderitzarMarciano() {
         for ( Sprite nau: marcianoNaves){
@@ -136,11 +130,15 @@ public class Home implements Initializable {
 //        }
     }
     private void renderitzarMisil() {
-        for (int i = 0; i < misil.size() - 1; i++) {
-            //misil.get(i).clear(gc, misil.get(i).getPosX(), misil.get(i).getPosY());
+        int pos = misil.size()-1;
+
+        for (int i = 0; i < misil.size() ; i++) {
             misil.get(i).setPosition( misil.get(i).getPosX(), misil.get(i).move());
+            if ( misil.get(pos).getPosY() < 920){
+                misilRetarder = true;
+
+            }
             misil.get(i).render(gc);
-            //  misil.get(i).
         }
     }
 
@@ -150,11 +148,7 @@ public class Home implements Initializable {
         anchorPaneFondo.setPrefWidth(Mides.APP_WIDTH);
         canvas.setWidth(Mides.APP_WIDTH);
         canvas.setHeight(Mides.APP_HEIGHT);
-       // System.out.println("duració:" + sound.getDuration().toString() + " loc:" + sound.getSource());
-       // setSoundEffects();
-        audioClip.setCycleCount(MediaPlayer.INDEFINITE);
 
-        //audioClip.setCycleCount(8);
         imageFondo = new Image("images/fondo.jpg", Mides.APP_WIDTH, Mides.APP_HEIGHT,false, false);
         fondoPantalla = new ImageView(imageFondo);
         player = new Player(new Image("images/player.png"));
@@ -178,8 +172,11 @@ public class Home implements Initializable {
                 if (event.getCode() == KeyCode.LEFT){
                     player.moveLeft();
                 }
-                if (event.getCode() == KeyCode.SPACE){
-                    disparar();
+                if (misil.size() < limiteDiparos) {
+                    if (event.getCode() == KeyCode.SPACE) {
+                        disparar();
+
+                    }
                 }
             }
         });
@@ -197,7 +194,6 @@ public class Home implements Initializable {
                 marciano.setImage(new Image("images/ufo.png",75,35,false,false));
                 marciano.setPosition(x,y);
                 marciano.setId_nave(e);
-//                if (marciano.getId_nave()==0)  marciano.setImage(new Image("images/1.png",75,35,false,false));
                 marcianoNaves.add(marciano);
                 // totalEnemies++;
             }
@@ -207,13 +203,13 @@ public class Home implements Initializable {
         Sprite disparo = new Sprite();
         disparo.setImage(new Image("images/projectil.png", 15,15,false, false));
         disparo.setPosition(player.getPosX() + 40, player.getPosY() - 20);
-        misil.add(disparo);
+
+        if ( misilRetarder ) {
+                misil.add(disparo);
+                misilRetarder = false;
+            MediaPlayer laserClip = new MediaPlayer(laser);
+            laserClip.play();
+        }
+
     }
-//    private void setSoundEffects() {
-//
-//        explosionEffect = new SoundEffect("/home/albert/IdeaProjects/Invaders/src/sound/soexplosio.wav");
-//
-//    }
-
-
 }
