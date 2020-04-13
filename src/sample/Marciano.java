@@ -84,4 +84,13 @@ public class Marciano {
     public void setId_Nave(int id_Nave) {
         this.id_Nave = id_Nave;
     }
+
+    public int getDirX() {
+        return dirX;
+    }
+
+    public int getDirY() {
+        return dirY;
+    }
+
 }

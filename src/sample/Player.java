@@ -19,7 +19,7 @@ public class Player {
 
     public Player (Image image){
         this.posX = 200;
-        this.posY = 1065;
+        this.posY = 1245;
         this.velX = 20.0f;
         this.velY = 1.5f;
         this.dirX = 1;

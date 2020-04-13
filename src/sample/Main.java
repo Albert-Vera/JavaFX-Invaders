@@ -5,8 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
+
 
 public class Main extends Application {
 
@@ -29,13 +29,10 @@ public class Main extends Application {
 
         Home home = loader.getController();
         home.setScene(sc);
-
-
-
         stage.setScene(sc);
         stage.setTitle("Invaders");
 
-        stage.setResizable(false);
+        //stage.setResizable(false);
        // stage.setFullScreen(true);
         stage.show();
     }

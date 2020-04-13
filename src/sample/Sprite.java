@@ -90,16 +90,29 @@ public class Sprite
             posX += velX;
 
             if(posX>=1650-width) {
+                dirX = (-1) * dirX;
+                posY += 60;
 //                home.marcianoNaves = new ArrayList<>();
-//                for (Sprite as: home.marcianoNaves){
-                    dirX = (-1) * dirX;
-                    posY += 60;
-//                    as.setDirX(dirX);
-//                    as.setPosY(posY);
-//                    as.setPosition(posX, posY);
-//                    home.marcianoNaves.add(as);
-               // }
-
+//                int menor = 30;
+//                double  pos = 0;
+//
+//                // Busca nau supervivient mes a l'esquerra per agafar posX de referencia per a les demes.
+//                for (int i = 0; i < 30; i++) {
+//
+//                    if (marcianoNaves.get(i).getId_nave() < menor) {
+//                        menor = marcianoNaves.get(i).getId_nave();
+//                    }
+//                }
+//                double numero = marcianoNaves.get(menor).getPosX();
+//                marcianoNaves.get(menor).setPosition((numero -= velX), posY);
+//
+//                //Tracta de donar posicions novas a totes les naus apartir de posicio nau mes a la esquerra
+//                for ( Sprite asa: marcianoNaves){
+//
+//                    asa.setPosition(marcianoNaves.get(menor).getPosX()  + (asa.getId_nave()*120) , posY);
+//                    home.marcianoNaves.add(asa);
+//                }
+//
             }
         }else {
             posX -= velX;
@@ -110,7 +123,9 @@ public class Sprite
         }
         return posY;
     }
-
+    public Image getImage() {
+        return image;
+    }
 
     public Rectangle2D getBoundary()
     {
