@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -25,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
@@ -33,8 +35,6 @@ import java.util.Scanner;
 public class Home implements Initializable {
     private Sprite[][] marcianoNaves = new Sprite[3][10];
     private int SPACE = 40;
-    private String valorParaId;
-    private int id ;
     private int score = 0 ;
     private int increment = 10;
     private int width1 = 74;
@@ -52,20 +52,23 @@ public class Home implements Initializable {
     private int velocitatMarcians = 15;
     private int aumentVelocitatMarcians = 15;
     private int limitDretScreen = 320;
+    private boolean isFinalPartida, start = false;
     private boolean misilRetarder = true;
     //private ArrayList<Sprite> marcianoNaves;
     ArrayList<Sprite> misil = new ArrayList<>();
     private Scene scene;
-    private GraphicsContext gc,gf;
+    private GraphicsContext gc;
     private Player player;
     private SoundEffect  explosionEffect;
     private boolean finalPartida = false;
 
+
     private String s = getClass().getClassLoader().getResource("sound/soexplosio.wav").toExternalForm();
-    private String disparo = getClass().getClassLoader().getResource("sound/disparo2.mp3").toExternalForm();
+    private final String disparo = getClass().getClassLoader().getResource("sound/disparo2.mp3").toExternalForm();
     private Media sound = new Media(s);
-    private Media laser = new Media(disparo);
-    private MediaPlayer laserClip;
+    AudioClip laserClip = new AudioClip(disparo);
+    // private Media laser = new Media(disparo);
+    // private MediaPlayer laserClip;
     private MediaPlayer audioClip;
     private Image imageFondo;
     @FXML ImageView fondoPantalla;
@@ -84,9 +87,8 @@ public class Home implements Initializable {
         public void handle(ActionEvent event) {
             anchorReset.setVisible(false);
             gc.drawImage(imageFondo, 0, 0);
-            if (!finalPartida) {
-                textExit.setVisible(true);
-                textExit.setText("Prem 'Q' per abandonar");
+            if (!finalPartida && start) { // Con boton Start inicia el juego
+                anchorText.setVisible(true);
                 gc.fillText("SCORE<1> " + score + "\t\t\t\t\t\t    HI-SCORE\t\t\t\t\t\t\t\t  SCORE<2>", 30, 30);
                 gc.fillText("Prem 'Q' per abandonar",50,1350);
                 player.render(gc);
@@ -101,16 +103,16 @@ public class Home implements Initializable {
                 posXprimeraNau = 180;
                 posYprimeraNau = 165;
                 increment = 10;
-               // aumentVelocitatMarcians += 5;
-                anchorReset.setVisible(true);
-
-                //finalPantalla("Total Score: " + score, "Winner !!!!");
+                laserClip.stop();
+                audioClip.stop();
+                if (!isFinalPartida) anchorReset.setVisible(true);
+                else finalPantalla("Total Score: " + score, "Winner !!!!");
             }
         }
     })
     );
     public void btnContinuar(){
-
+        isFinalPartida = true;
         crearMarciano();
     }
     void finalPantalla(String texte, String texte2){
@@ -124,14 +126,15 @@ public class Home implements Initializable {
     public void clickStart(){
         menuInici.setVisible(false);
         anchorJoc.setVisible(true);
+        start = true; // Quan es toca el boto Start per iniciar el joc
     }
-    private void clickExit(){
+    private void clickExit(){ // Quan abandonas la partida
         anchorJoc.setVisible(false);
         anchorFinal.setVisible(true);
         textWinner.setText("Caguetes t'has rendit....");
         textScore.setText("Total Score: " + score);
     }
-    private void  colisionConNave(){
+    private void  colisionConNave(){ // Colisió de la nau del jugador contra els marcians
         for (int i = 0; i < marcianoNaves.length; i++) {
             for (int j = 0; j < marcianoNaves[i].length; j++) {
                 if (marcianoNaves[i][j] != null) {
@@ -230,11 +233,11 @@ public class Home implements Initializable {
         anchorPaneFondo.setPrefWidth(Mides.APP_WIDTH);
         canvas.setWidth(Mides.APP_WIDTH);
         canvas.setHeight(Mides.APP_HEIGHT);
-        anchorReset.setVisible(false);
-       // anchorText.setVisible(false);
-        anchorJoc.setVisible(false);
+
         menuInici.setVisible(true);
-        textExit.setVisible(true);
+        anchorReset.setVisible(false);
+        anchorText.setVisible(false);
+        anchorJoc.setVisible(false);
         anchorFinal.setVisible(false);
         imageFondo = new Image("images/fondo.jpg", Mides.APP_WIDTH, Mides.APP_HEIGHT,false, false);
         fondoPantalla = new ImageView(imageFondo);
@@ -243,7 +246,6 @@ public class Home implements Initializable {
         gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.WHITE);
         gc.setFont(Font.font("OCR A Std", 30));
-        gc.fillRect(100,100,100,100);
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
@@ -267,20 +269,21 @@ public class Home implements Initializable {
     public void setScene(Scene sc) {
         scene = sc;
     }
-    public void crearMarciano(){
+    public void crearMarciano() {
 
-        for (int y = 165, i= 0 ; y < 450 && i < 3 ; y += 120, i++) {
+        for (int y = 165, i = 0; y < 450 && i < 3; y += 120, i++) {
             for (int x = 180, e = 0; x < 1700 && e < cantidadNaves; x += 140, e++) {
-                if (y == 165 ) {
-                    marcianoNaves[i][e] = dadesMarciano(x,y, "images/m61.png", 74);
+                if (y == 165) {
+                    marcianoNaves[i][e] = dadesMarciano(x, y, "images/m61.png", 74);
                 } else if (y == 285) {
-                    marcianoNaves[i][e] = dadesMarciano(x,y, "images/ufo2.png",75);
+                    marcianoNaves[i][e] = dadesMarciano(x, y, "images/ufo2.png", 75);
                 } else {
-                    marcianoNaves[i][e] = dadesMarciano(x,y, "images/ufo.png", 76);
+                    marcianoNaves[i][e] = dadesMarciano(x, y, "images/ufo.png", 76);
                 }
                 totalEnemics++;
             }
         }
+
     }
     private Sprite dadesMarciano(int x, int y, String imagePath, double width) {
         Sprite dades = new Sprite();
@@ -301,7 +304,13 @@ public class Home implements Initializable {
 //            laserClip = new MediaPlayer(laser);
 //            laserClip.stop();
 //            laserClip.play();
-
+            laserClip.play(30);
+            try {
+                Thread.sleep(10);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            //laserClip.stop();
         }
     }
 }

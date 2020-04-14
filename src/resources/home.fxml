@@ -72,14 +72,14 @@
             <Button fx:id="btnContinuar" layoutX="370.0" layoutY="328.0" mnemonicParsing="false" onMouseClicked="#btnContinuar" prefHeight="32.0" prefWidth="146.0" text="Continuar" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="370.0" AnchorPane.rightAnchor="426.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorText" cacheShape="false" centerShape="false" opacity="0.0" prefHeight="200.0" prefWidth="200.0" scaleShape="false" AnchorPane.bottomAnchor="1100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorText" cacheShape="false" centerShape="false" layoutX="14.0" layoutY="525.0" opacity="0.0" prefHeight="199.0" prefWidth="1707.0" scaleShape="false" style="-fx-background-color: #fcfafa;" AnchorPane.bottomAnchor="575.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="21.0" AnchorPane.topAnchor="525.0">
          <children>
-            <Text fx:id="text1" fill="#f8f6f6" layoutY="120.8466796875" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" wrappingWidth="299.298828125" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="90.0">
+            <Text fx:id="text2" fill="#fffbfb" layoutX="614.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Texdasdsat" wrappingWidth="152.298828125" AnchorPane.leftAnchor="614.0" AnchorPane.topAnchor="80.0">
                <font>
                   <Font size="30.0" />
                </font>
             </Text>
-            <Text fx:id="text2" fill="#fffbfb" layoutX="614.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Texdasdsat" visible="false" wrappingWidth="152.298828125" AnchorPane.leftAnchor="614.0" AnchorPane.topAnchor="80.0">
+            <Text fx:id="text1" fill="#f8f6f6" layoutY="120.8466796875" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" text="Score: " textAlignment="CENTER" wrappingWidth="299.298828125" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="90.0">
                <font>
                   <Font size="30.0" />
                </font>
