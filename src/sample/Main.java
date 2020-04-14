@@ -32,7 +32,7 @@ public class Main extends Application {
         stage.setScene(sc);
         stage.setTitle("Invaders");
 
-        //stage.setResizable(false);
+        stage.setResizable(false);
        // stage.setFullScreen(true);
         stage.show();
     }

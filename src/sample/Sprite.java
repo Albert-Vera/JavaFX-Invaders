@@ -48,25 +48,6 @@ public class Sprite
         posX = x;
         posY = y;
     }
-
-    public void setVelocity(double x, double y)
-    {
-        velX = x;
-        velY = y;
-    }
-
-    public void addVelocity(double x, double y)
-    {
-        velX += x;
-        velY += y;
-    }
-
-    public void update(double time)
-    {
-        posX += velX * time;
-        posY += velY * time;
-    }
-
     public void render(GraphicsContext gc) {
         gc.drawImage( image, posX, posY);
     }
@@ -123,6 +104,15 @@ public class Sprite
         }
         return posY;
     }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
     public Image getImage() {
         return image;
     }
