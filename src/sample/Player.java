@@ -12,8 +12,6 @@ import javafx.scene.paint.Color;
 public class Player {
 
     private Image image;
-    Home home = new Home();
-    Projectil projectil ;
 
     private double posX, posY, velX, velY, width, height;
     private int dirX, dirY;
