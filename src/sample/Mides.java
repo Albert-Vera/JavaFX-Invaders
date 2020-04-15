@@ -6,9 +6,6 @@ public class Mides {
     protected int SPACE = 40;
     protected int score = 0 ;
     protected int increment = 10;
-    protected int width1 = 74;
-    protected int width2 = 75;
-    protected int width3 = 76;
     protected int cantidadNaves = 10;
     protected int limiteDiparos = 14;
     protected int totalEnemics = 0;

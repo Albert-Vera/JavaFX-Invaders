@@ -36,7 +36,7 @@ public class Player {
         gc.drawImage(image, posX, posY);
     }
     public void clear(GraphicsContext gc) {
-        gc.clearRect(posX-150,posY, width+300, height+20);
+        gc.clearRect(posX,posY, width, height+20);
     }
     public void moveRight(){
         setPosX(posX += velX);

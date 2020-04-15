@@ -28,6 +28,8 @@ public class Home implements Initializable {
     Mides mides = new Mides();
     private Sprite[][] marcianoNaves = new Sprite[3][10];
     private boolean isFinalPartida, start = false;
+    private int jugadorDead = 0;
+    private boolean jugadorDeadBool = false;
     private boolean misilRetarder = true;
     ArrayList<Sprite> misil = new ArrayList<>();
     private Scene scene;
@@ -55,11 +57,13 @@ public class Home implements Initializable {
         public void handle(ActionEvent event) {
             anchorReset.setVisible(false);
             gc.drawImage(imageFondo, 0, 0);
+            if (jugadorDeadBool) jugadorDead ++;
+            if (jugadorDead == 10) finalPantalla("No ho has aconseguit","Cagada ....");
             if (!finalPartida && start) { // Con boton Start inicia el juego
                 anchorText.setVisible(true);
                 gc.fillText("SCORE<1> " + mides.score + "\t\t\t\t\t\t    HI-SCORE\t\t\t\t\t\t\t\t  SCORE<2>", 30, 30);
                 gc.fillText("Prem 'Q' per abandonar",50,1350);
-                player.render(gc);
+                if (!jugadorDeadBool) player.render(gc);
                 detectarTeclado();
                 renderitzarMarciano();
                 renderitzarMisil();
@@ -103,9 +107,11 @@ public class Home implements Initializable {
         for (int i = 0; i < marcianoNaves.length; i++) {
             for (int j = 0; j < marcianoNaves[i].length; j++) {
                 if (marcianoNaves[i][j] != null) {
-                    if (player.intersects(marcianoNaves[i][j])) {
-                        explosion(marcianoNaves[i][j].getPosX(), marcianoNaves[i][j].getPosY());
-                        finalPantalla("No ho has aconseguit","Cagada ....");
+                    if (player != null && player.intersects(marcianoNaves[i][j])) { // si es null es que jugador es dead
+                        marcianoNaves[i][j] = null;
+                        explosion(player.getPosX()+25, player.getPosY());
+                        jugadorDeadBool = true;
+                        player = null;
                     }
                 }
             }
@@ -181,7 +187,7 @@ public class Home implements Initializable {
             if ( misil.get(pos).getPosY() < mides.posicionUltimoDisparo){
                 misilRetarder = true;
             }
-            misil.get(i).render(gc);
+            if (!jugadorDeadBool) misil.get(i).render(gc);
         }
     }
     @Override
@@ -206,21 +212,21 @@ public class Home implements Initializable {
         timeline.play();
     }
     void detectarTeclado(){
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.RIGHT){
-                    player.moveRight();
+            scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (event.getCode() == KeyCode.RIGHT) {
+                        player.moveRight();
+                    }
+                    if (event.getCode() == KeyCode.LEFT) {
+                        player.moveLeft();
+                    }
+                    if (event.getCode() == KeyCode.SPACE) {
+                        disparar();
+                    }
+                    if (event.getCode() == KeyCode.Q) clickExit();
                 }
-                if (event.getCode() == KeyCode.LEFT){
-                    player.moveLeft();
-                }
-                if (event.getCode() == KeyCode.SPACE) {
-                    disparar();
-                }
-                if (event.getCode() == KeyCode.Q) clickExit();
-            }
-        });
+            });
     }
     public void setScene(Scene sc) {
         scene = sc;
