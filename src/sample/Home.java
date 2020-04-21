@@ -57,7 +57,7 @@ public class Home implements Initializable {
         public void handle(ActionEvent event) {
             anchorReset.setVisible(false);
             gc.drawImage(imageFondo, 0, 0);
-            if (jugadorDeadBool) jugadorDead ++;
+            if ( jugadorDeadBool ) jugadorDead ++;
             if (jugadorDead == 10) finalPantalla("No ho has aconseguit","Cagada ....");
             if (!finalPartida && start) { // Con boton Start inicia el juego
                 anchorText.setVisible(true);
@@ -169,6 +169,14 @@ public class Home implements Initializable {
                 if (marcianoNaves[i][e] != null) {
                     marcianoNaves[i][e].setPosition(x, y);
                     gc.drawImage(marcianoNaves[i][e].getImage(), x, y);
+                        // Explosió nau jugador i final partida si marcians arriban a baix
+                    if ( marcianoNaves[i][e].getPosY() > 1200 && player != null) {
+                        explosion(player.getPosX(), player.getPosY());
+                        jugadorDeadBool = true;
+                        player = null;
+                        x -= mides.incrementPosNauX;
+                    }
+                    // Per aumentar velocitat quan detecti una nau a posY 465 i no aumenti amb totes les naus
                     if (!soloPuedePasarUno) {
                         if (marcianoNaves[i][e].getPosY() == 465) {
                             mides.aumentVelocitatMarcians += mides.increment;
