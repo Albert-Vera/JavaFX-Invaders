@@ -39,10 +39,12 @@ public class Player {
         gc.clearRect(posX,posY, width, height+20);
     }
     public void moveRight(){
+        if ( getPosX() < 1620)
         setPosX(posX += velX);
     }
     public void moveLeft(){
-        setPosX(posX -= velX);
+
+        if ( getPosX() > 10 ) setPosX(posX -= velX);
     }
     public Rectangle2D getBoundary()
     {
