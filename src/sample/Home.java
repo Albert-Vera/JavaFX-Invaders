@@ -48,7 +48,7 @@ public class Home implements Initializable {
     @FXML AnchorPane anchorFinal;
     @FXML AnchorPane anchorReset;
     @FXML AnchorPane anchorText;
-    @FXML Button btnContinuar;
+    @FXML Button btnContinuar, btnReiniciar;
     @FXML Canvas canvas;
     @FXML Text textScore, textWinner, textExit, text1, text2;
 
@@ -57,8 +57,8 @@ public class Home implements Initializable {
         public void handle(ActionEvent event) {
             anchorReset.setVisible(false);
             gc.drawImage(imageFondo, 0, 0);
-            if ( jugadorDeadBool ) jugadorDead ++;
-            if (jugadorDead == 10) finalPantalla("No ho has aconseguit","Cagada ....");
+            if ( jugadorDeadBool ) jugadorDead ++; // control per que un cop mort segueixo encare funcionan el joc un temps
+            if (jugadorDead == 10) finalPantalla("No ho has aconseguit","Cagada ....");// ara si final joc
             if (!finalPartida && start) { // Con boton Start inicia el juego
                 anchorText.setVisible(true);
                 gc.fillText("SCORE<1> " + mides.score + "\t\t\t\t\t\t    HI-SCORE\t\t\t\t\t\t\t\t  SCORE<2>", 30, 30);
@@ -70,7 +70,7 @@ public class Home implements Initializable {
                 colisiones();
                 colisionConNave();
             }
-            if (mides.totalEnemics <= 0){
+            if (mides.totalEnemics <= 0){ // reinicia joc o el finalitzar
                 mides.posXprimeraNau = 180;
                 mides.posYprimeraNau = 165;
                 mides.increment = 10;
@@ -80,9 +80,23 @@ public class Home implements Initializable {
         }
     })
     );
-    public void btnContinuar(){
-        isFinalPartida = true;
+    public void btnContinuar(){ // aqui pasar a segona pantalla
+        isFinalPartida = true; // com que no hi ha tercera pantalla ja deixa variable preparada per acabar joc
         crearMarciano();
+    }
+    public void btnReiniciarPartida(){
+        anchorFinal.setVisible(false);
+        menuInici.setVisible(false);
+        anchorReset.setVisible(false);
+        anchorText.setVisible(false);
+        anchorJoc.setVisible(true);
+        mides.posXprimeraNau = 180;
+        mides.posYprimeraNau = 165;
+        mides.score = 0;
+        mides.totalEnemics = 0;
+        mides.increment = 10;
+        crearMarciano();
+        timeline.play();
     }
     void finalPantalla(String texte, String texte2){
         anchorPaneFondo.setPrefHeight(Mides.APP_HEIGHT/2);;
@@ -118,15 +132,6 @@ public class Home implements Initializable {
         }
     }
     private void colisiones() {
-        mides.posXprimeraNau += mides.velocitatMarcians;
-        if (mides.posXprimeraNau >= mides.limitDretScreen) {
-            mides.posYprimeraNau += 50;
-            mides.velocitatMarcians = (-mides.aumentVelocitatMarcians);
-        }
-        if (mides.posXprimeraNau <= 50) {
-            mides.posYprimeraNau += 50;
-            mides.velocitatMarcians = (+mides.aumentVelocitatMarcians);
-        }
         for (int i = 0; i < marcianoNaves.length; i++) {
             for (int j = 0; j < marcianoNaves[i].length; j++) {
                 Iterator<Sprite> misilLanzado = misil.iterator();
@@ -164,6 +169,15 @@ public class Home implements Initializable {
     }
     public void renderitzarMarciano() {
         boolean soloPuedePasarUno = false;
+        mides.posXprimeraNau += mides.velocitatMarcians;
+        if (mides.posXprimeraNau >= mides.limitDretScreen) {
+            mides.posYprimeraNau += 50;
+            mides.velocitatMarcians = (-mides.aumentVelocitatMarcians);
+        }
+        if (mides.posXprimeraNau <= 50) {
+            mides.posYprimeraNau += 50;
+            mides.velocitatMarcians = (+mides.aumentVelocitatMarcians);
+        }
         for (int y = mides.posYprimeraNau, i = 0; y < 1250 && i < 3; y += mides.incrementPosNauY, i++) {
             for (int x = mides.posXprimeraNau, e = 0; x < 1700 && e < mides.cantidadNaves; x += mides.incrementPosNauX, e++) {
                 if (marcianoNaves[i][e] != null) {
@@ -223,16 +237,18 @@ public class Home implements Initializable {
             scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
                 @Override
                 public void handle(KeyEvent event) {
-                    if (event.getCode() == KeyCode.RIGHT) {
-                        player.moveRight();
+                    if ( player != null) { // Quany la nau es destruida hi ha un delay que encara corre el joc
+                        if (event.getCode() == KeyCode.RIGHT) {
+                            player.moveRight();
+                        }
+                        if (event.getCode() == KeyCode.LEFT) {
+                            player.moveLeft();
+                        }
+                        if (event.getCode() == KeyCode.SPACE) {
+                            disparar();
+                        }
+                        if (event.getCode() == KeyCode.Q) clickExit();
                     }
-                    if (event.getCode() == KeyCode.LEFT) {
-                        player.moveLeft();
-                    }
-                    if (event.getCode() == KeyCode.SPACE) {
-                        disparar();
-                    }
-                    if (event.getCode() == KeyCode.Q) clickExit();
                 }
             });
     }

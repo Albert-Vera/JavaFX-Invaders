@@ -43,18 +43,23 @@
             </Button>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorFinal" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="200.0">
+      <AnchorPane fx:id="anchorFinal" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="200.0">
          <children>
-            <Text fx:id="textWinner" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="200.0">
+            <Text fx:id="textWinner" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" AnchorPane.leftAnchor="360.0" AnchorPane.topAnchor="200.0">
                <font>
                   <Font size="40.0" />
                </font>
             </Text>
-            <Text fx:id="textScore" fill="#f2f2f2" strokeType="OUTSIDE" strokeWidth="0.0" text="Total score: " AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="400.0">
+            <Text fx:id="textScore" fill="#f2f2f2" strokeType="OUTSIDE" strokeWidth="0.0" text="Total score: " AnchorPane.leftAnchor="470.0" AnchorPane.topAnchor="500.0">
                <font>
                   <Font size="22.0" />
                </font>
             </Text>
+            <Button fx:id="btnReiniciar" mnemonicParsing="false" onMouseClicked="#btnReiniciarPartida" prefHeight="49.0" prefWidth="269.0" style="-fx-background-color: #240dd4;" text="Reiniciar" textAlignment="CENTER" textFill="#f8f8f8" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="430.0">
+               <font>
+                  <Font size="41.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorReset" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #47443b;" visible="false" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="500.0">
